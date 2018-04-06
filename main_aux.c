@@ -23,11 +23,11 @@
  */
 int* initialize(){
 	int i=0;
-	int* res[2];
+	int* res;
 	int heapNum;
 	int* heapSizes;
 	printf(HEAPSREQ);
-	scanf("%d",heapNum);
+	scanf("%d",&heapNum);
 	if (heapNum < 1 || heapNum > 32){
 		printf(HEAPSERR);
 		return res;
@@ -35,7 +35,7 @@ int* initialize(){
 	else {
 		printf(HEAPSIZEREQ);
 		scanf("%d*",heapSizes);
-		for (i=0;i<sizeof(heapSizes);++i){
+		for (i=0;i<(int)sizeof(heapSizes);++i){
 			if (heapSizes[i]<0){
 				printf(HEAPSIZENEGERR,i);
 				return res;

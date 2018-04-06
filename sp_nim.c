@@ -8,6 +8,15 @@
 #define YOURTURN "Your turn: please enter the heap index and the number of removed objects.\n"
 #define YOURTURN_TRY2 "Error: Invalid input.\nPlease enter again the heap index and the number of removed objects.\n"
 
+/*calculates the nim sum of the entire heap*/
+int nim_sum(int *heaps) {
+	int sum = 0;
+	int i;
+	for (i=0;i<32;i++) {
+		sum ^= heaps[i];
+	}
+	return sum;
+}
 /*calculates the computer's next move using nim sum*/
 int* computer_next_move(int *heaps) {
 	int nim_sum = nim_sum(heaps);
@@ -42,17 +51,11 @@ int* computer_next_move(int *heaps) {
 	result_move[0] = min_index;
 	return result_move;
 }
-/*calculates the nim sum of the entire heap*/
-int nim_sum(int *heaps) {
-	int sum = 0;
-	for (int i=0;i<32;i++) {
-		sum ^= heaps[i];
-	}
-	return sum;
-}
+
 /*checks if all heaps are empty*/
 int is_game_over(int *heaps) {
-	for (int i=0;i<32;i++) {
+	int i;
+	for (i=0;i<32;i++) {
 		if (heaps[i] > 0)
 			return 0;
 	}
