@@ -5,6 +5,8 @@
  *      Author: Eidan
  */
 #include "main_aux.h"
+#define YOURTURN "Your turn: please enter the heap index and the number of removed objects.\n"
+#define YOURTURN_TRY2 "Error: Invalid input.\nPlease enter again the heap index and the number of removed objects.\n"
 
 /*calculates the computer's next move using nim sum*/
 int* computer_next_move(int *heaps) {
@@ -57,8 +59,24 @@ int is_game_over(int *heaps) {
 	return 1;
 }
 
+int* user_next_move(int *heaps) {
+	printf(YOURTURN);
+	int valid = 1, index, val;
+	int request[2];
+	do {
+		if (!valid)
+			printf(YOURTURN_TRY2);
+		scanf("%d%d", index, val);
+		if (0>index || index>32 || heaps[index] < val)
+			valid = 0;
+	} while (!valid);
+	request[0] = index;
+	request[1] = val;
+	return request;
+}
+
 int game(int *heaps) {
-	int whos_turn = 1; /*1=user 0=computer*/
+	int whos_turn = 0; /*1=user 0=computer*/
 	int turn = 1; /*turn counter*/
 	int turn_request[2]; /*each turn is summed up as {index of heap to remove from, no. of objects to remove}*/
 	while (!is_game_over(heaps)) {
@@ -78,3 +96,4 @@ int game(int *heaps) {
 	print_board(turn,heaps);
 	print_winner(whos_turn);
 }
+
