@@ -5,57 +5,67 @@
  *      Author: RonyHirsch
  */
 #include <stdio.h>
+#define NUMOFHEAPS 32
 #define HEAPSREQ "Enter the number of heaps:\n"
-#define HEAPSERR "Error: the number of heaps must be between 1 and 32.\n"
+#define HEAPSERR "Error: the number of heaps must be between 1 and %d.\n"
 #define HEAPSIZEREQ "Enter the heap sizes:\n"
 #define HEAPSIZENEGERR "Error: the size of heap %d should be positive.\n"
 #define YOUWIN "You win!\n"
 #define COMPWIN "Computer wins!\n"
-#define HEAPSTAT "In turn %d heap sizes are: "
+#define HEAPSTAT "In turn %d heap sizes are:"
 #define YOURTURN "Your turn: please enter the heap index and the number of removed objects.\n"
 #define YOURTURNERR "Error: invalid input.\nPlease enter again the heap index and the number of removed objects.\n"
-
-
+/*
+ * check if the number of heaps is between 1 and 32
+ */
+int check_heapNum(int heapNum){
+	if (heapNum<1 || heapNum > NUMOFHEAPS){
+		printf(HEAPSERR,NUMOFHEAPS);
+		return 0;
+	}
+	else return 1;
+}
 
 /*
  * get input from user of num of heaps and how many obs in every heap before game starts
  * return num of heaps and num of objs in every heap
  */
-int* initialize(){
-	int i=0;
-	int* res;
+int init_heap_num(){
 	int heapNum;
-	int* heapSizes;
+
 	printf(HEAPSREQ);
 	scanf("%d",&heapNum);
-	if (heapNum < 1 || heapNum > 32){
-		printf(HEAPSERR);
-		return res;
-	}
-	else {
-		printf(HEAPSIZEREQ);
-		scanf("%d*",heapSizes);
-		for (i=0;i<(int)sizeof(heapSizes);++i){
-			if (heapSizes[i]<0){
-				printf(HEAPSIZENEGERR,i);
-				return res;
-			}
-		}
-		res[0]=heapNum; res[1]=heapSizes;
-		return res;
-	}
+	if (!check_heapNum(heapNum)) return 0;
+	return heapNum;
+}
 
+int* init_heap_sizes(int heapNum){
+	static int heaps[NUMOFHEAPS];
+	static int err[] = {-1};
+	int i;
+
+	printf(HEAPSIZEREQ);
+	for (i=0;i<heapNum;++i){
+		scanf("%d", &heaps[i]);
+		if (heaps[i]<0){
+			printf(HEAPSIZENEGERR,i);
+			return err;}
+	}
+	return heaps;
 }
 
 
-void print_board(int turnNum, int* heaps){
+/*
+ * prints the situation of the board in every turn
+ */
+void print_board(int turnNum, int* heaps, int heapNum){
 	int i=0;
-	printf(turnNum+"	");
-	for (i=0;i<sizeof(heaps);++i){
-		printf(heaps[i]);
-		printf(" ");
+
+	printf(HEAPSTAT,turnNum);
+	for (i=0;i<heapNum;++i){
+		printf(" h%d=%d",i+1,(int)heaps[i]);
 	}
-	printf("	");
+	printf(".\n");
 	return;
 }
 
@@ -71,7 +81,7 @@ void print_move(int whoseTurn, int removedObs, int heapInd){
 	char* player;
 	if (whoseTurn==0) player = "Computer";
 	else player = "User";
-	printf("%s takes %d objects from heap %d",player, removedObs,heapInd);
+	printf("%s takes %d objects from heap %d\n",player, removedObs,heapInd+1);
 	return;
 }
 
@@ -83,7 +93,7 @@ void print_winner(int whoseTurn) {
 	if (whoseTurn==0){
 		printf(COMPWIN);
 	}
-	else printf(YOUWIN);
+	else {printf(YOUWIN);}
 	return;
 }
 

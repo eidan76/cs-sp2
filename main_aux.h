@@ -10,8 +10,9 @@
 
 void print_winner(int whoseTurn);
 void print_move(int whoseTurn, int removedObs, int heapInd);
-void print_board(int turnNum, int* heaps);
-int* initialize();
+void print_board(int turnNum, int* heaps, int heapNum);
+int init_heap_num();
+int* init_heap_sizes(int heapNum);
 
 
 
